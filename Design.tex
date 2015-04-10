@@ -1,0 +1,95 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usepackage{pgf-umlsd}
+\usepackage{tabularx}
+\usepackage{listings}
+\lstset{
+  language=C,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  basicstyle=\rm\small\ttfamily,
+  keywordstyle=\bfseries\color{red},
+  frame=single,
+  commentstyle=\color{gray}=small,
+  stringstyle=\color{green},
+  %backgroundcolor=\color{gray!10},
+  %tabsize=2,
+  rulecolor=\color{black!30},
+  %title=\lstname,
+  breaklines=true,
+  framextopmargin=2pt,
+  framexbottommargin=2pt,
+  extendedchars=true
+}
+\author{Justine Doutreloux \\
+Nicolas Breels}
+\title{Systèmes informatiques\\
+Projet 2 - Support pour l'interview de design}
+\begin{document}
+\maketitle
+\section{Architecture}
+Il y a 6 fonctions de bases.
+\begin{itemize}
+\item \lstinline|void take_number(int number, char *file)| : Cette fonction prend un nombre, elle le factorise en nombre premier. Ensuite elle écrit les différents nombres premier dans un fichier les uns à la suite de l'autres et elle termine en écrivant le nom du fichier. Si l'argument fichier est NULL, elle écrit : " noFile".
+
+\item \lstinline|void only_number(char *file)| : Prend le fichier qui a été écrit par les différents threads, affiche le nombre unique à la première ligne, le nom du fichier à la deuxième et le temps d'exécution à la troisième.
+
+\item \lstinline|void take_fichier(char *file)| : Prend un fichier, converti chaque nombre avec la librairie endian(3) et aplique \begin{verbatim}take_number \end{verbatim} sur chaque nombre converti.
+
+\item \lstinline|int max_threads()| : retourne le nombre maximum de thread rentré par l'utilisateur.
+
+\item \lstinline|void add_number()| : Applique \begin{verbatim} take_number \end{verbatim} avec comme premier argument un nombre rentré par l'utilisateur et le second NULL.
+
+\item \lstinline|void add_file()| : Télécharge le fichier à l'adresse URL rentré par l'utilisateur et l'enregistre dans le dossier courrant du projet. Applique \begin{verbatim} take_fichier \end{verbatim} sur le nouveau fichier crée.
+\end{itemize}
+\section{Threads}
+Pour ce projet, nous pensons utilisé un thread par fichier à analyser. Chaque thread effectuera la même chose sur un fichier différent. Les fonctions expliquées ci-dessus seront appliquées sur les fichiers et le thread écrira les réponses, suivies du nom du fichier, dans un fichier central. Nous utiliserons les sémaphores pour régler le problème de synchronisation. Les threads seront ensuite terminés et le programme reprendra son exécution normale. 
+\section{Synchronisation}
+Nous utilisons les sémaphores car nous les trouvons plus faciles à appliquer dans le cas qui nous occupe. Il faudra faire attention aux différentes utilisations de post et wait. Deux threads ne pourront pas écrire dans le fichier central en même temps.
+\section{Structures de données}
+Les facteurs premiers seront échangés via un fichier central dans lequel chaque thread écrira (synchronisation via les sémaphores). 
+\section{Algorithme}
+\begin{lstlisting}
+#include <stdio.h>
+unsigned int liste_facteurs[32];
+int i = 0;
+void f(unsigned int n, unsigned int d)
+{
+  if (n != 1)
+    {
+      if (n % d)
+        {
+          d++;
+          f(n, d);
+        }
+      else
+        {
+          liste_facteurs[i] = d;
+          i++;
+          f(n / d, d);
+        }
+    }
+}
+int main(void)
+{
+  unsigned int n;
+  int k;
+  scanf("%u", &n);
+  f(n, 2);
+  for (k =0; k < i; k++)
+  printf("%d ", liste_facteurs[k]);
+  printf("\n");
+  return 0;
+}
+\end{lstlisting}
+Source : http://openclassrooms.com/forum/sujet/produit-de-facteur-premier-58167.
+\end{document}
