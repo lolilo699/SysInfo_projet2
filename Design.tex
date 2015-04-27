@@ -52,7 +52,7 @@ Il y a 6 fonctions de bases.
 \item \lstinline|void add_file()| : Télécharge le fichier à l'adresse URL rentré par l'utilisateur et l'enregistre dans le dossier courrant du projet. Applique \begin{verbatim} take_fichier \end{verbatim} sur le nouveau fichier crée.
 \end{itemize}
 \section{Threads}
-Pour ce projet, nous pensons utilisé un thread par fichier à analyser. Chaque thread effectuera la même chose sur un fichier différent. Les fonctions expliquées ci-dessus seront appliquées sur les fichiers et le thread écrira les réponses, suivies du nom du fichier, dans un fichier central. Nous utiliserons les sémaphores pour régler le problème de synchronisation. Les threads seront ensuite terminés et le programme reprendra son exécution normale. 
+Le programme lance des threads qui lisent les fichiers et chargent les nombres dans une liste chainée. Pendant le chargement des nombres, d'autres threads calculent les nombres premiers. Ensuite, on trouve le nombre qui est unique.
 \section{Synchronisation}
 Nous utilisons les sémaphores car nous les trouvons plus faciles à appliquer dans le cas qui nous occupe. Il faudra faire attention aux différentes utilisations de post et wait. Deux threads ne pourront pas écrire dans le fichier central en même temps.
 \section{Structures de données}
