@@ -34,6 +34,7 @@
 Nicolas Breels}
 \title{Systèmes informatiques\\
 Projet 2 - Support pour l'interview de design}
+\date{\vspace{-5ex}}
 \begin{document}
 \maketitle
 \section{Architecture}
@@ -58,6 +59,7 @@ Nous utilisons les sémaphores car nous les trouvons plus faciles à appliquer d
 \section{Structures de données}
 Les facteurs premiers seront échangés via un fichier central dans lequel chaque thread écrira (synchronisation via les sémaphores). 
 \section{Algorithme}
+\footnotetext[1]{Source : http://openclassrooms.com/forum/sujet/produit-de-facteur-premier-58167.}
 \begin{lstlisting}
 #include <stdio.h>
 unsigned int liste_facteurs[32];
@@ -91,5 +93,4 @@ int main(void)
   return 0;
 }
 \end{lstlisting}
-Source : http://openclassrooms.com/forum/sujet/produit-de-facteur-premier-58167.
 \end{document}
