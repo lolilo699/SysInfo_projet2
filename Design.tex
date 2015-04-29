@@ -57,7 +57,7 @@ Le programme lance des threads qui lisent les fichiers et chargent les nombres d
 \section{Synchronisation}
 Nous utilisons les sémaphores car nous les trouvons plus faciles à appliquer dans le cas qui nous occupe. Il faudra faire attention aux différentes utilisations de post et wait. Deux threads ne pourront pas écrire dans le fichier central en même temps.
 \section{Structures de données}
-Les facteurs premiers seront échangés via un fichier central dans lequel chaque thread écrira (synchronisation via les sémaphores). 
+Les facteurs premiers seront échangés via une liste chaînée dans laquelle chaque thread écrira (synchronisation via les sémaphores). 
 \section{Algorithme}
 \footnotetext[1]{Source : http://openclassrooms.com/forum/sujet/produit-de-facteur-premier-58167.}
 \begin{lstlisting}
