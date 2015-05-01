@@ -9,6 +9,14 @@
 #include <stdio.h>
 #include <inttypes.h>
 
+struct Node()
+{
+    uint32_t nombre;
+    int count;
+    Node *next;
+    char nom_du_fichier[];
+}
+
 void add_node(Node *liste, Node *n)
 {
     if(liste == NULL)
