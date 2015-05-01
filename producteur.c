@@ -6,6 +6,13 @@
 #include <stdio.h>
 #include <inttypes.h>
 #include <endian.h>
+#include <stdlib.h>
+#include <string.h>
+#include <unistd.h>
+
+#include <curl/curl.h>
+#include <curl/easy.h>
+
 
 struct Node()
 {
@@ -65,11 +72,33 @@ Node* producteur_fichier(char fichier[])
         return producteur_descripteur(fd);
     }
 }
+/*
+ * Fonction nécessaire pour producteur_URL
+ */
 
-//Node* producteur_URL(char url[])
-//{
+size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
+{
+    int fd = *((int *) userp);
     
-//}
+    return write(fd, contents, size*nmemb);
+}
+
+/*
+ * infos sur curl : http://curl.haxx.se/libcurl/c/
+ */
+Node* producteur_URL(char url[])
+{
+    int fd;
+    CURL *curl_handler = curl_easy_init();
+    curl_easy_setopt(curl_handler, CURLOPT_URL, &url);
+    curl_easy_setopt(curl_handler, CURLOPT_WRITEFUNCTION, write_callback);
+    curl_easy_setopt(curl_handler, CURLOPT_WRITEDATA, (void *)&fd);
+//    curl_easy_setopt(curl_handler, CURLOPT_USERAGENT, "libcurl-agent/1.0");
+    curl_easy_perform(curl_handler);
+    curl_easy_cleanup(curl_handler);
+    return producteur_descripteur(fd);
+    
+}
 
 Node* producteur_stdin()
 {
