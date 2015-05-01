@@ -4,22 +4,36 @@
 
 
 #include <stdio.h>
+#include <inttypes.h>
+
+struct Node()
+{
+    uint32_t nombre;
+    Node *next;
+}
 
 
-
-
-
-uint32_t[] producteur_fichier(char fichier[])
+Node* producteur_descripteur(int fd)
 {
     
 }
 
-uint32_t[] producteur_URL(char url[])
+
+Node* producteur_fichier(char fichier[])
 {
-    
+    int fd = open(fichier, O_RDONLY);
+    if(fd<0)
+    {
+        printf("Le fichier %c n'a pas pu s'ouvrir", fichier);
+        return {n, 0, NULL};
+    }
+    else
+    {
+        return producteur_descripteur(fd);
+    }
 }
 
-uint32_t[] producteur_descripteur(int fd)
-{
+//Node* producteur_URL(char url[])
+//{
     
-}
+//}
