@@ -7,15 +7,17 @@
 #include <math.h>
 #include <errno.h>
 #include <stdint.h>
+i = 0;
+unsigned int liste_facteurs[];
 
 void prime(unsigned int n, unsigned int d)
 {
     if (n != 1)
     {
-        if (n % d)
+        if (n % d != 0)
         {
             d++;
-            f(n, d);
+            prime(n, d);
         }
         else
         {
