@@ -7,10 +7,15 @@
 #include <math.h>
 #include <errno.h>
 #include <stdint.h>
-i = 0;
+#include <inttypes.h>
+#include <semaphore.h>
+
+#include "chaine_liee.c"
+#include "producteur.c"
+
 unsigned int liste_facteurs[];
 
-void prime(unsigned int n, unsigned int d)
+int prime(unsigned int n, unsigned int d)
 {
     if (n != 1)
     {
@@ -23,18 +28,30 @@ void prime(unsigned int n, unsigned int d)
         {
             liste_facteurs[i] = d;
             i++;
-            f(n / d, d);
+            prime(n / d, d);
         }
     }
+    return i;
 }
-int conso(void)
+
+int conso(semaphore *s, Node *n, Node1 *n1)
 {
-    unsigned int n;
-    int k;
-    scanf("%u", &n);
-    prime(n, 2);
-    for (k =0; k < i; k++)
-        printf("%d ", liste_facteurs[k]);
-    printf("\n");
+    while(n1->next != NULL)
+    {
+        uint64_t n3 = n1->nombre;
+        int i = prime(n, 2);
+        int k;
+        for (k =0; k < i; k++)
+        {
+            sem_wait(s);
+            Node *n2 = {liste_facteurs[i], 0, NULL, c};
+            n->next = n2;
+            sem_post(s);
+            for (k=0; k < i; k++)
+            {
+                liste_facteurs[i]=0;
+            }
+        }
+    }
     return 0;
 }
