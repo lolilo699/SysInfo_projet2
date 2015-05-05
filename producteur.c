@@ -14,14 +14,14 @@
 #include <curl/easy.h>
 
 
-struct Node()
+struct Node1()
 {
     uint64_t nombre;
     Node *next;
 }
 
 
-Node* producteur_descripteur(int fd)
+Node1* producteur_descripteur(int fd)
 {
     uint64_t nombre;
     Node *premier;
@@ -59,7 +59,7 @@ Node* producteur_descripteur(int fd)
 }
 
 
-Node* producteur_fichier(char fichier[])
+Node1* producteur_fichier(char fichier[])
 {
     int fd = open(fichier, O_RDONLY);
     if(fd<0)
@@ -86,7 +86,7 @@ size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
 /*
  * infos sur curl : http://curl.haxx.se/libcurl/c/
  */
-Node* producteur_URL(char url[])
+Node1* producteur_URL(char url[])
 {
     int fd;
     CURL *curl_handler = curl_easy_init();
@@ -100,7 +100,7 @@ Node* producteur_URL(char url[])
     
 }
 
-Node* producteur_stdin()
+Node1* producteur_stdin()
 {
     return producteur_descripteur(STDIN_FILENO);
 }
