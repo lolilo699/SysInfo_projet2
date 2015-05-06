@@ -92,7 +92,21 @@ int main(int argc, const char *argv[]){
     printf("thread :%d\n",N);
     initialize();
 
-
-    return(EXIT_SUCCESS);
-
+    pthread_t cons[max_threads];
+    for (int i=0; i < max_threads; i++)
+    {
+        if (pthread_create(&cons[i], NULL, conso, NULL))
+        {
+            perror("phtread_create cons");
+            exit(EXIT_FAILURE);
+        }
+    }
+    for (int j=0; j < argc; j++)
+    {
+        if(actif[i])
+        {
+            pthread_join(cons[j], NULL)
+        }
+    }
 }
+>>>>>>> 1eeef173e8b87b1edeaf6d88df95796e98622766
