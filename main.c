@@ -17,7 +17,7 @@ sem_t *semaphore;
 int main(int argc, char** argv[])
 {
     
-    pthread_t conso[max_threads];
+    pthread_t cons[max_threads];
     for (int i=0; i < max_threads; i++)
     {
         if (pthread_create(&cons[i], NULL, conso, NULL))
@@ -30,7 +30,7 @@ int main(int argc, char** argv[])
     {
         if(actif[i])
         {
-            pthread_join(prod[i], NULL)
+            pthread_join(cons[j], NULL)
         }
     }
 }
