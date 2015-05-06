@@ -13,7 +13,7 @@
 #include "chaine_liee.c"
 
 
-int N=0;
+int max_threads=0;
 int err;
 int sizeFile=0;
 bool value_input=false;
@@ -25,6 +25,9 @@ sem_t empty2;
 sem_t full2;
 Node1 *liste_nombres;
 Node *liste_nombres_premier;
+bool fini;
+int producteur_finis;
+int nb_producteurs;
 
 
 
@@ -53,7 +56,8 @@ void initialize(){
         perror("sem_init(&empty2, 0, N)");
         exit(EXIT_FAILURE);
     }
-
+    nb_producteurs = 0;
+    fini = false;
 }
 
 
@@ -64,35 +68,37 @@ int main(int argc, const char *argv[]){
     int i;
     int count=0;
     const char **File;
-
-
-    for(i=1;i<argc;i++){
-        if(strcmp("-maxthreads",argv[i])==0){
-            i++;
-            N=atoi(argv[i]);
-            }
-        else if (strcmp(argv[i],"-stdin")==0){
-            value_input=true;
-        }
-        else {
-        sizeFile++;
-        }
-    }
-
-    File = malloc(sizeFile*sizeof(char *));
-
-    for(i=1;i<argc;i++){
-        if(strcmp("-maxthreads",argv[i])==0){
-            i++;
-        }
-        else{
-            File[count]=argv[i];
-            count++;
-        }
-    }
-    printf("taille :%d\n",sizeFile);
-    printf("thread :%d\n",N);
     initialize();
+    pthread_mutex_t *prod = malloc (argc * sizeof(pthread_mutex_t));
+    bool *actif = calloc (argc, sizeof(bool));
+
+    for(i=1;i<argc;i++)
+    {
+        if(strcmp("-maxthreads",argv[i])==0)
+        {
+            i++;
+            max_threads = atoi(argv[i]);
+        }
+        else if (strcmp(argv[i],"-stdin")==0)
+        {
+            pthread_create(&prod[i], NULL, producteur_stdin, NULL);
+            actif[i] = true;
+            nb_producteurs++;
+        }
+        else if (strncmp(argv[i], "http://", strlen("http://")) == 0)
+        {
+            pthread_create(&prod[i], NULL, producteur_URL, NULL);
+            actif[i] = true;
+            nb_producteurs++;
+        }
+        else
+        {
+            pthread_create(&prod[i], NULL, producteur_fichier, NULL);
+            nb_producteurs++;
+        }
+    }
+//    printf("taille :%d\n",sizeFile);
+//    printf("thread :%d\n",N);
 
 //    pthread_t cons[max_threads];
 //    for (int i=0; i < max_threads; i++)

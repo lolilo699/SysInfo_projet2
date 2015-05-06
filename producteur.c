@@ -66,6 +66,8 @@ void producteur_descripteur(int fd, char file)
             printf("Erreur");
         }
     }
+    producteur_fini++;
+    fini = (producteur_fini == nb_producteur);
 }
 
 

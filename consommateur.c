@@ -42,6 +42,7 @@ int conso(sem_t *s, Node *n, Node1 *n1)
         {
             pthread_mutex_lock(&mutex1);
             sem_wait(&full1);
+            sem_wait(&empty2);
             Node *n2 = {liste_facteurs[i], 0, liste_nombres->file, c};
             if (liste_nombres_premiers == NULL)
             {
@@ -56,6 +57,7 @@ int conso(sem_t *s, Node *n, Node1 *n1)
                 liste_nombres_premiers->next = n2;
             }
             sem_post(&empty1);
+            sem_post(&full2);
             pthread_mutex_unlock(&mutex1);
             for (k=0; k < i; k++)
             {
