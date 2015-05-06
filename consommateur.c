@@ -10,8 +10,11 @@
 #include <inttypes.h>
 #include <semaphore.h>
 
+//variable globale utilisée pour stocker la liste des facteurs premiers d'un nombre
 unsigned int liste_facteurs[];
 
+
+//fonction trouvée sur openclassrooms pour factoriser
 int prime(unsigned int n, unsigned int d)
 {
     if (n != 1)
@@ -31,7 +34,11 @@ int prime(unsigned int n, unsigned int d)
     return i;
 }
 
-int conso(sem_t *s, Node *n, Node1 *n1)
+/* Fonction qui représente le consommateur : prend un nombre, le factorise et ajoute les facteurs
+ * dans une liste
+ *
+ */
+void conso()
 {
     while(liste_nombres->next != NULL)
     {
@@ -42,22 +49,8 @@ int conso(sem_t *s, Node *n, Node1 *n1)
         {
             pthread_mutex_lock(&mutex1);
             sem_wait(&full1);
-            sem_wait(&empty2);
-            Node *n2 = {liste_facteurs[i], 0, liste_nombres->file, c};
-            if (liste_nombres_premiers == NULL)
-            {
-                liste_nombres_premiers = n2;
-            }
-            else
-            {
-                while (liste_nombres_premiers->next != NULL)
-                {
-                    liste_nombres_premiers = liste_nombres_premiers->next;
-                }
-                liste_nombres_premiers->next = n2;
-            }
+            add_number( n3);
             sem_post(&empty1);
-            sem_post(&full2);
             pthread_mutex_unlock(&mutex1);
             for (k=0; k < i; k++)
             {
@@ -65,5 +58,4 @@ int conso(sem_t *s, Node *n, Node1 *n1)
             }
         }
     }
-    return 0;
 }
