@@ -6,6 +6,10 @@
 #include <pthread.h>
 #include <semaphore.h>
 
+#include "producteur.c"
+#include "consommateur.c"
+#include "chaine_liee.c"
+
 int main(int argc, char** argv)
 {
     
