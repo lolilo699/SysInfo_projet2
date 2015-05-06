@@ -15,14 +15,16 @@
 
 int N=0;
 int err;
+int sizeFile=0;
+bool value_input=false;
 pthread_mutex_t mutex1;
 sem_t empty1;
 sem_t full1;
 pthread_mutex_t mutex2;
 sem_t empty2;
 sem_t full2;
-bool value_input=false;
-int sizeFile=0;
+
+
 
 void initialize(){
     if (pthread_mutex_init(&mutex1, NULL)) {
