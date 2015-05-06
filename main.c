@@ -28,6 +28,8 @@ Node *liste_nombres_premier;
 bool fini;
 int producteur_finis;
 int nb_producteurs;
+int temps_initial = malloc(sizeof(struct timeval));
+int temps_final = malloc(sizeof(struct timeval));
 
 
 
@@ -60,11 +62,33 @@ void initialize(){
     fini = false;
 }
 
+void nombre_premier()
+{
+    while (liste_nombres_premier->next != NULL)
+    {
+        if (liste_nombres_premier->count ==1)
+        {
+            count1++;
+            printf("Le nombre premier unique est %d.\n", liste_nombres_premier->nombre);
+            printf("Il a été trouvé dans le fichier %c.\n", liste_nombres_premier->nom_du_fichier);
+            printf("Le programme a mis %d secondes pour s'exécuter.\n", (temps_final - temps_initial));
+            return;
+        }
+        else
+        {
+            liste_nombres_premier = liste_nombres_premier->next;
+        }
+    }
+    printf("Il n'y a pas de nombre unique.\n");
+    printf("Le programme a mis %d secondes pour s'exécuter.\n", (temps_final - temps_initial));
+
+}
 
 
 
-
-int main(int argc, const char *argv[]){
+int main(int argc, const char *argv[])
+{
+    gettimeofday(temps_initial, NULL);
     initialize();
     pthread_mutex_t *prod = malloc (argc * sizeof(pthread_mutex_t));
     bool *actif = calloc (argc, sizeof(bool));
@@ -110,5 +134,6 @@ int main(int argc, const char *argv[]){
         }
     }
     pthread_join(&consos);
-                
+    gettimeofday(temps_final, NULL);
+    nombre_premier();
 }
