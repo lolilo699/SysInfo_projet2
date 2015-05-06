@@ -1,0 +1,55 @@
+\documentclass[11pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[francais]{babel}
+\usepackage[T1]{fontenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{lmodern}
+\usepackage{verbatim}
+\usepackage{tikz}
+\usepackage{pgf-umlsd}
+\usepackage{tabularx}
+\usepackage{listings}
+\lstset{
+  language=C,
+  numbers=left,
+  numberstyle=\tiny\color{gray},
+  basicstyle=\rm\small\ttfamily,
+  keywordstyle=\bfseries\color{red},
+  frame=single,
+  commentstyle=\color{gray}=small,
+  stringstyle=\color{green},
+  %backgroundcolor=\color{gray!10},
+  %tabsize=2,
+  rulecolor=\color{black!30},
+  %title=\lstname,
+  breaklines=true,
+  framextopmargin=2pt,
+  framexbottommargin=2pt,
+  extendedchars=true
+}
+
+\title{Systèmes informatiques\\
+Projet 2 - Factorisation de nombre}
+\date{\vspace{-5ex}}
+\begin{document}
+\maketitle
+
+
+\section{Architecture}
+Notre programme fonctionnent selon un double schéma producteur-consommateur. Le premier producteur-consommateur est un simple tableau à double entrée, avec la première entrée qui est un nombre à factoriser et la deuxième un nom de fichier. Le deuxième producteur-consommateur est un tableau à 3 entrées dont la première est un nombre, la deuxième un compteur qui compte le nombre d'occurance du nombre premier dans l'ensemble des fichiers et la troisième est le nom du fichier ou le nombre se situe. Si le nombre premier est présent dans plusieurs fichiers, on garde uniquement le nom du premier fichier dans le tableau. Nous allons pour cela utiliser des threads. Après ce double schéma producteur-consommateur, le programme retourne un nombre dont l'occurence est unique dans le deuxième schéma.
+
+\section{Synchronisation}
+Nous utilisons des sémaphores et des mutex pour les producteurs-consommateurs. La façon dont ceux-ci sont imbriqué provient directement de la partie théorique du cour SINF1252.
+
+\section{Structures de données}
+Comment savoir si un nombre est premier ?
+Pour savoir si un nombre est premier il faut vérifier qu'il n'a aucun diviseur à par 1 ou lui-même
+
+\section{Algorithme}
+
+Pour savoir si un nombre est premier il faut vérifier qu'il est divisible pas tous les nombres inférieurs à sa racine carré. 
+
+\end{document}

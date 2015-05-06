@@ -7,11 +7,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <semaphore.h>
-
+/*
 #include "producteur.c"
 #include "consommateur.c"
 #include "chaine_liee.c"
-
+*/
 
 int N=0;
 int err;
