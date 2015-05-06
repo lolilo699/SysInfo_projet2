@@ -7,17 +7,90 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <semaphore.h>
-
+/*
 #include "producteur.c"
 #include "consommateur.c"
 #include "chaine_liee.c"
+*/
 
-sem_t *semaphore;
+int N=0;
+int err;
+pthread_mutex_t mutex1;
+sem_t empty1;
+sem_t full1;
+pthread_mutex_t mutex2;
+sem_t empty2;
+sem_t full2;
+bool value_input=false;
+int sizeFile=0;
 
-int main(int argc, char** argv[])
-{
-    semaphore = sem_open("liste", O_CREATn S_ISUR | S_IWUSR, 0);
-    int max_threads = argv[1];
-    
-    sem_unlink("liste");
+void initialize(){
+    if (pthread_mutex_init(&mutex1, NULL)) {
+        perror("pthread_mutex_init(&mutex1, NULL)");
+        exit(EXIT_FAILURE);
+    }
+    if (pthread_mutex_init(&mutex2, NULL)) {
+        perror("pthread_mutex_init(&mutex2, NULL)");
+        exit(EXIT_FAILURE);
+    }
+    if (sem_init(&full1, 0, 0)) {
+        perror("sem_init(&full1, 0, 0)");
+        exit(EXIT_FAILURE);
+    }
+    if (sem_init(&empty1, 0, N)) {
+        perror("sem_init(&empty1, 0, N)");
+        exit(EXIT_FAILURE);
+    }
+    if (sem_init(&full2, 0, 0)) {
+        perror("sem_init(&full2, 0, 0)");
+        exit(EXIT_FAILURE);
+    }
+    if (sem_init(&empty2, 0, N)) {
+        perror("sem_init(&empty2, 0, N)");
+        exit(EXIT_FAILURE);
+    }
+
+}
+
+
+
+
+
+int main(int argc, const char *argv[]){
+    int i;
+    int count=0;
+    const char **File;
+
+
+    for(i=1;i<argc;i++){
+        if(strcmp("-maxthreads",argv[i])==0){
+            i++;
+            N=atoi(argv[i]);
+            }
+        else if (strcmp(argv[i],"-stdin")==0){
+            value_input=true;
+        }
+        else {
+        sizeFile++;
+        }
+    }
+
+    File = malloc(sizeFile*sizeof(char *));
+
+    for(i=1;i<argc;i++){
+        if(strcmp("-maxthreads",argv[i])==0){
+            i++;
+        }
+        else{
+            File[count]=argv[i];
+            count++;
+        }
+    }
+    printf("taille :%d\n",sizeFile);
+    printf("thread :%d\n",N);
+    initialize();
+
+
+    return(EXIT_SUCCESS);
+
 }
