@@ -7,11 +7,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <semaphore.h>
-/*
+
 #include "producteur.c"
 #include "consommateur.c"
 #include "chaine_liee.c"
-*/
+
 
 int max_threads=0;
 int err;
@@ -65,14 +65,12 @@ void initialize(){
 
 
 int main(int argc, const char *argv[]){
-    int i;
-    int count=0;
-    const char **File;
     initialize();
     pthread_mutex_t *prod = malloc (argc * sizeof(pthread_mutex_t));
     bool *actif = calloc (argc, sizeof(bool));
-
-    for(i=1;i<argc;i++)
+    int count = 0;
+    
+    for(int i = 1; i < argc; i++)
     {
         if(strcmp("-maxthreads",argv[i])==0)
         {
@@ -94,31 +92,23 @@ int main(int argc, const char *argv[]){
         else
         {
             pthread_create(&prod[i], NULL, producteur_fichier, NULL);
+            actif[i] = true;
             nb_producteurs++;
         }
     }
-//    printf("taille :%d\n",sizeFile);
-//    printf("thread :%d\n",N);
-
-//    pthread_t cons[max_threads];
-//    for (int i=0; i < max_threads; i++)
-//    {
-//        if (pthread_create(&cons[i], NULL, conso, NULL))
-//        {
-//            perror("phtread_create cons");
-//            exit(EXIT_FAILURE);
-//        }
-//    }
+    pthread_mutex_t *consos = malloc (max_threads * sizeof(pthread_mutex_t));
     
-//    for (int j=0; j < argc; j++)
-//    {
-//        if(actif[j])
-//        {
-//            pthread_join(prod[j], NULL)
-//        }
-//    }
-//    for (int k=0; k < max_threads; k++)
-//    {
-//        pthread_join(cons[k], NULL)
-//    }
+    while (count != nb_producteurs)
+    {
+        for (int i = 0; i < max_threads; i++)
+        {
+            if (pthread_join(&consos[i]) == true)
+                {
+                    pthread_create(&consos[i], NULL, conso, NULL);
+                    count++;
+                }
+        }
+    }
+    pthread_join(&consos);
+                
 }
