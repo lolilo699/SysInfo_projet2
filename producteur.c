@@ -1,6 +1,6 @@
 //
 //  producteur.c doit gérer l'ouverture, la lecture et la fermeture d'un fichier, et l'écriture des nombres lus dans le fichier dans une liste. Il doit aussi gérer les cas où l'entrée n'est pas un fichier mais une URL, l'entrée standard ou un descripteur de fichier.
-//  
+//
 
 
 #include <stdio.h>
@@ -9,20 +9,19 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include<endian.h>
+//#include <curl/curl.h>
+//#include <curl/easy.h>
 
-#include <curl/curl.h>
-#include <curl/easy.h>
 
-
-struct Node1()
-{
+struct Node1{
     uint64_t nombre;
     char file[];
-    Node *next;
-}
+    struct Node1 *next;
+};
+typedef struct Node1 Node1;
 
-
-Node1* producteur_descripteur(int fd, char file)
+Node1 *producteur_descripteur(int fd, char file)
 {
     uint64_t nombre;
     Node1 *premier;
@@ -50,7 +49,7 @@ Node1* producteur_descripteur(int fd, char file)
                 courant->next = n;
                 courant = courant->next;
             }
-            
+
         }
         else
         {
@@ -76,18 +75,18 @@ Node1* producteur_fichier(char fichier[])
 }
 /*
  * Fonction nécessaire pour producteur_URL
- */
+
 
 size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
     int fd = *((int *) userp);
-    
+
     return write(fd, contents, size*nmemb);
 }
 
-/*
+
  * infos sur curl : http://curl.haxx.se/libcurl/c/
- */
+
 Node1* producteur_URL(char url[])
 {
     int fd;
@@ -99,8 +98,9 @@ Node1* producteur_URL(char url[])
     curl_easy_perform(curl_handler);
     curl_easy_cleanup(curl_handler);
     return producteur_descripteur(fd, url);
-    
+
 }
+*/
 
 Node1* producteur_stdin()
 {
