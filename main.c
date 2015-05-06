@@ -16,8 +16,21 @@ sem_t *semaphore;
 
 int main(int argc, char** argv[])
 {
-    semaphore = sem_open("liste", O_CREATn S_ISUR | S_IWUSR, 0);
-    int max_threads = argv[1];
     
-    sem_unlink("liste");
+    pthread_t conso[max_threads];
+    for (int i=0; i < max_threads; i++)
+    {
+        if (pthread_create(&cons[i], NULL, conso, NULL))
+        {
+            perror("phtread_create cons");
+            exit(EXIT_FAILURE);
+        }
+    }
+    for (int j=0; j < argc; j++)
+    {
+        if(actif[i])
+        {
+            pthread_join(prod[i], NULL)
+        }
+    }
 }

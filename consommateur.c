@@ -44,7 +44,7 @@ int conso(sem_t *s, Node *n, Node1 *n1)
         for (k =0; k < i; k++)
         {
             sem_wait(s);
-            Node *n2 = {liste_facteurs[i], 0, NULL, c};
+            Node *n2 = {liste_facteurs[i], 0, n1->file, c};
             n->next = n2;
             sem_post(s);
             for (k=0; k < i; k++)
