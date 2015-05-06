@@ -1,6 +1,6 @@
 //
 //  producteur.c doit gérer l'ouverture, la lecture et la fermeture d'un fichier, et l'écriture des nombres lus dans le fichier dans une liste. Il doit aussi gérer les cas où l'entrée n'est pas un fichier mais une URL, l'entrée standard ou un descripteur de fichier.
-//  
+//
 
 
 #include <stdio.h>
@@ -9,17 +9,17 @@
 #include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
+#include<endian.h>
+//#include <curl/curl.h>
+//#include <curl/easy.h>
 
-#include <curl/curl.h>
-#include <curl/easy.h>
 
-
-struct Node1()
-{
+struct Node1{
     uint64_t nombre;
     char file[];
-    Node *next;
-}
+    struct Node1 *next;
+};
+typedef struct Node1 Node1;
 
 
 void producteur_descripteur(int fd, char file)
@@ -84,16 +84,16 @@ void producteur_fichier(char fichier[])
 }
 /*
  * Fonction nécessaire pour producteur_URL
- */
+
 
 size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
 {
     int fd = *((int *) userp);
-    
+
     return write(fd, contents, size*nmemb);
 }
 
-/*
+
  * infos sur curl : http://curl.haxx.se/libcurl/c/
  */
 void producteur_URL(char url[])
@@ -109,6 +109,7 @@ void producteur_URL(char url[])
     producteur_descripteur(fd, url);
     
 }
+*/
 
 void producteur_stdin()
 {

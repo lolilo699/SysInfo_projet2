@@ -17,17 +17,18 @@
 struct Node1()
 {
     uint64_t nombre;
+    char file[];
     Node *next;
 }
 
 
-Node1* producteur_descripteur(int fd)
+Node1* producteur_descripteur(int fd, char file)
 {
     uint64_t nombre;
-    Node *premier;
+    Node1 *premier;
     premier->nombre = 0;
     premier->next = NULL;
-    Node *courant;
+    Node1 *courant;
     courant=premier;
     while(true)
     {
@@ -42,8 +43,9 @@ Node1* producteur_descripteur(int fd)
             }
             else
             {
-                Node *n;
+                Node1 *n;
                 n->nombre = nombre;
+                n->file = file;
                 n->next = NULL;
                 courant->next = n;
                 courant = courant->next;
@@ -69,7 +71,7 @@ Node1* producteur_fichier(char fichier[])
     }
     else
     {
-        return producteur_descripteur(fd);
+        return producteur_descripteur(fd, fichier);
     }
 }
 /*
@@ -96,11 +98,11 @@ Node1* producteur_URL(char url[])
 //    curl_easy_setopt(curl_handler, CURLOPT_USERAGENT, "libcurl-agent/1.0");
     curl_easy_perform(curl_handler);
     curl_easy_cleanup(curl_handler);
-    return producteur_descripteur(fd);
+    return producteur_descripteur(fd, url);
     
 }
 
 Node1* producteur_stdin()
 {
-    return producteur_descripteur(STDIN_FILENO);
+    return producteur_descripteur(STDIN_FILENO, "STDIN");
 }
