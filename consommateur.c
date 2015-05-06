@@ -34,7 +34,7 @@ int prime(unsigned int n, unsigned int d)
     return i;
 }
 
-int conso(semaphore *s, Node *n, Node1 *n1)
+int conso(sem_t *s, Node *n, Node1 *n1)
 {
     while(n1->next != NULL)
     {
