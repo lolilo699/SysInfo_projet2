@@ -1,10 +1,16 @@
 //
-//  chaine_liee.c
+//  chaine_liee.c : représente la liste chainée que nous utilisons pour les nombres premiers
 //
 
 
 #include <stdio.h>
 #include <inttypes.h>
+
+/*Structure de la liste chainee. 
+ * nombre est le nombre premier à stocker
+ * nom_du_fichier représente le fichier dans lequel il a été trouvé
+ * count représente le nombre de fois où il a été trouvé
+ */
 
 struct Node()
 {
@@ -13,6 +19,10 @@ struct Node()
     Node *next;
     char nom_du_fichier[];
 }
+
+/* Fonction pour ajouter un noeud dans la liste. prend en argument un pointeur vers la liste
+ * et un pointeur vers le noeud à ajouter
+ */
 
 void add_node(Node *liste, Node *n)
 {
@@ -26,6 +36,10 @@ void add_node(Node *liste, Node *n)
     }
     liste->next = n;
 }
+
+/* Fonction pour ajouter un nombre dans la liste. On teste d'abord s'il est déjà
+ * présent et s'il ne l'est pas on utilise add_node.
+ */
 
 void add_number(Node *liste, uint32_t n)
 {
