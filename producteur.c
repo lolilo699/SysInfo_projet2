@@ -59,7 +59,7 @@ void producteur_descripteur(int fd, char file)
                 liste_nombres->next = n;
                 pthread_mutex_unlock(&mutex1);
             }
-            sem_post(&full1);
+
         }
         else
         {
