@@ -7,11 +7,11 @@
 #include <fcntl.h>
 #include <sys/stat.h>
 #include <semaphore.h>
-/*
+
 #include "producteur.c"
 #include "consommateur.c"
 #include "chaine_liee.c"
-*/
+
 
 int N=0;
 int err;
@@ -23,6 +23,8 @@ sem_t full1;
 pthread_mutex_t mutex2;
 sem_t empty2;
 sem_t full2;
+Node1 *liste_nombres;
+Node *liste_nombres_premier;
 
 
 
@@ -92,21 +94,25 @@ int main(int argc, const char *argv[]){
     printf("thread :%d\n",N);
     initialize();
 
-    pthread_t cons[max_threads];
-    for (int i=0; i < max_threads; i++)
-    {
-        if (pthread_create(&cons[i], NULL, conso, NULL))
-        {
-            perror("phtread_create cons");
-            exit(EXIT_FAILURE);
-        }
-    }
-    for (int j=0; j < argc; j++)
-    {
-        if(actif[i])
-        {
-            pthread_join(cons[j], NULL)
-        }
-    }
+//    pthread_t cons[max_threads];
+//    for (int i=0; i < max_threads; i++)
+//    {
+//        if (pthread_create(&cons[i], NULL, conso, NULL))
+//        {
+//            perror("phtread_create cons");
+//            exit(EXIT_FAILURE);
+//        }
+//    }
+    
+//    for (int j=0; j < argc; j++)
+//    {
+//        if(actif[j])
+//        {
+//            pthread_join(prod[j], NULL)
+//        }
+//    }
+//    for (int k=0; k < max_threads; k++)
+//    {
+//        pthread_join(cons[k], NULL)
+//    }
 }
->>>>>>> 1eeef173e8b87b1edeaf6d88df95796e98622766

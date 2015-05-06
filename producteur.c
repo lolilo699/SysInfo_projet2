@@ -22,56 +22,64 @@ struct Node1()
 }
 
 
-Node1* producteur_descripteur(int fd, char file)
+void producteur_descripteur(int fd, char file)
 {
     uint64_t nombre;
-    Node1 *premier;
-    premier->nombre = 0;
-    premier->next = NULL;
-    Node1 *courant;
-    courant=premier;
+    //Node1 *premier;
+    //premier->nombre = 0;
+    //premier->next = NULL;
+    //Node1 *courant;
+    //courant=premier;
     while(true)
     {
         int bytes;
         bytes = read(fd, &nombre, sizeof(uint64_t));
         if(bytes==8)
         {
+            sem_wait(&empty1);
+            pthread_mutex_lock(&mutex1);
             nombre = be64toh(nombre);
-            if(premier==courant)
+            if(liste_nombre == NULL)
             {
-                premier->nombre = nombre;
+                liste_nombres->nombre = nombre;
+                liste_nombres->file = file;
+                liste_nombres->next = NULL;
+                pthread_mutex_unlock(&mutex1);
             }
             else
             {
+                while (liste_nombre->next != NULL)
+                {
+                    liste_nombres=liste_nombres->next;
+                }
                 Node1 *n;
                 n->nombre = nombre;
                 n->file = file;
                 n->next = NULL;
-                courant->next = n;
-                courant = courant->next;
+                liste_nombres->next = n;
+                pthread_mutex_unlock(&mutex1);
             }
-            
+            sem_post(&full1);
         }
         else
         {
             printf("Erreur");
         }
     }
-    return premier;
 }
 
 
-Node1* producteur_fichier(char fichier[])
+void producteur_fichier(char fichier[])
 {
     int fd = open(fichier, O_RDONLY);
     if(fd<0)
     {
         printf("Le fichier %c n'a pas pu s'ouvrir", fichier);
-        return {n, 0, NULL};
+        //return {n, 0, NULL};
     }
     else
     {
-        return producteur_descripteur(fd, fichier);
+        producteur_descripteur(fd, fichier);
     }
 }
 /*
@@ -88,7 +96,7 @@ size_t write_callback(void *contents, size_t size, size_t nmemb, void *userp)
 /*
  * infos sur curl : http://curl.haxx.se/libcurl/c/
  */
-Node1* producteur_URL(char url[])
+void producteur_URL(char url[])
 {
     int fd;
     CURL *curl_handler = curl_easy_init();
@@ -98,11 +106,11 @@ Node1* producteur_URL(char url[])
 //    curl_easy_setopt(curl_handler, CURLOPT_USERAGENT, "libcurl-agent/1.0");
     curl_easy_perform(curl_handler);
     curl_easy_cleanup(curl_handler);
-    return producteur_descripteur(fd, url);
+    producteur_descripteur(fd, url);
     
 }
 
-Node1* producteur_stdin()
+void producteur_stdin()
 {
-    return producteur_descripteur(STDIN_FILENO, "STDIN");
+    producteur_descripteur(STDIN_FILENO, "STDIN");
 }
